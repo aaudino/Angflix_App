@@ -1,18 +1,18 @@
-import { HttpClient } from '@angular/common/http';
-import { Injectable } from '@angular/core';
+import { HttpClient } from "@angular/common/http";
+import { Injectable } from "@angular/core";
 
-import { map } from 'rxjs';
-import { Tvshow, TvshowsDto } from '../types/tvshow';
-import { VideosDto } from '../types/video';
-import { ImagesDto } from '../types/image';
-import { CreditsDto } from '../types/credits';
+import { map } from "rxjs";
+import { Tvshow, TvshowsDto } from "../types/tvshow";
+import { VideosDto } from "../types/video";
+import { ImagesDto } from "../types/image";
+import { CreditsDto } from "../types/credits";
 
 @Injectable({
-  providedIn: 'root',
+  providedIn: "root",
 })
 export class TvshowsService {
-  private apiUrl = 'https://api.themoviedb.org/3';
-  private apiKey = '8c247ea0b4b56ed2ff7d41c9a833aa77';
+  private apiUrl = "https://api.themoviedb.org/3";
+  private apiKey = "2aa8a007904cd473112ec4a813675ecc";
 
   constructor(private http: HttpClient) {}
 
@@ -50,5 +50,12 @@ export class TvshowsService {
     return this.http
       .get<TvshowsDto>(`${this.apiUrl}/tv/${id}/similar?api_key=${this.apiKey}`)
       .pipe(map((data) => data.results.slice(0, 12)));
+  }
+
+  searchTvShows(page: number, searchValue?: string) {
+    const uri = searchValue ? "/search/tv" : "/tv/popular";
+    return this.http.get<TvshowsDto>(
+      `${this.apiUrl}${uri}?page=${page}&query=${searchValue}&api_key=${this.apiKey}`
+    );
   }
 }
